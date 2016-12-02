@@ -119,7 +119,8 @@ for a game or something."
             :dir {:north :foyer}
             :dir {:south :foyer}
             :contents #{:cyanide}
-            :contents #{:happiness}}
+            :contents #{:happiness}
+            :contents #{:death}}
 
  :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare"
 
@@ -130,7 +131,7 @@ for a game or something."
 
 
 
-
+;comment
 
 
 
