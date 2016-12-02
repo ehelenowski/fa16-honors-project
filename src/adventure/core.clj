@@ -9,7 +9,7 @@
     :foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created
 for a game or something."
            :title "in the foyer"
-           :dir {:south :grue-pen, :north :Dough-House , :down :Fun-House}
+           :dir {:south :grue-pen, :north :Dough-House}
            :contents #{:raw-egg}}
 
   :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
