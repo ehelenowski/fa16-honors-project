@@ -18,3 +18,4 @@ To run the program, use `lein run` from the command line.
 
 Copyright © 2016 Mattox Beckman, free for personal and educational use.
 
+Text Adventure Game in Clojure By Eryk Helenowski and  Vikrant Sharma

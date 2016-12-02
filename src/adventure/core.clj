@@ -4,15 +4,137 @@
   (:gen-class))
 
 (def the-map
-  {:foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created
+  {
+
+    :foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created
 for a game or something."
            :title "in the foyer"
            :dir {:south :grue-pen}
+           :dir {:north :Dough-House}
            :contents #{:raw-egg}}
-   :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
+
+  :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
               :title "in the grue pen"
               :dir {:north :foyer}
-              :contents #{}}
+              :contents #{:very-sharp-pencil}}
+
+  :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit."
+              :title "In the dough House"
+              :dir {:down :Basement}
+              :dir {:up :Attic}
+              :dir {:east :Lounge}
+              :contents #{:cinnabon}
+              :contents #{:knife}}
+
+  :Basement {:desc "It is dark and cold in here. You desperately need to pee, and want to leave."
+              :title "In the dungeon"
+              :dir {:east :Billiard-Room}
+              :dir {:down :Dough-House}
+              :dir {:up :Attic}
+              :contents #{:cobwebs}
+              :contents #{:a-rusty-screw}}
+
+
+ :Attic {:desc "It's very small and cramped up here... What's that smell?"
+
+             :title "In the Attic"
+             :dir {:east :Dining-Room}
+             :dir {:down :Dough-House}
+             :dir {:up :Attic}
+             :dir {:west :Hall}
+             :contents #{:lamp}
+             :contents #{:key}}
+
+ :Hall {:desc "A well lit hallway, there are many doors that lead to unknown locations, which route will you take?"
+
+             :title "In the Attic"
+             :dir {:east :Dining-Room}
+             :dir {:down :Dough-House}
+             :dir {:up :Attic}
+             :dir {:west :Storage-Room}
+             :dir {:down :Basement}
+             :dir {:north :Office-Room}
+             :dir {:south :Guest-Room}}
+
+ :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though."
+            :title "In the Storage-Room"
+            :dir {:east :Hall}
+            :dir {:up :Fun-House}
+            :contents #{:cork}
+            :contents #{:tweezers}
+            :contents #{:baseball}
+            :contents #{:phallic-object}}
+
+ :Dining-Room {:desc "The livestock seems to be running free in the Dining Room. A chicken decides to pounce on your face and begins scratching your eye balls. What would you like to do?"
+             :title "In the Dining-Room"
+             :dir {:east :Kitchen}
+             :dir {:down :Dough-House}
+             :dir {:up :Attic}
+             :dir {:west :Ballroom}
+             :contents #{:plate}}
+
+ :Ballroom {:desc "Soft music plays in the background. You sit down on the plush couch to rest... You are rudely awakened by a piano that seems to be barelling towards your face, what woudl you like to do?"
+
+             :title "In the Ballroom"
+             :dir {:east :Hall}
+             :dir {:down :Storage-Room}
+             :dir {:up :grue-pen}
+             :contents #{:vinyl-record}}
+
+ :Kitchen {:desc "More livestock running around here... the chef is wrestling with a rat in his hair and pots and pans seem to be flying about the room"
+
+             :title "In the Kitchen"
+             :dir {:west :Dining-Room}
+             :dir {:down :foyer}
+             :dir {:north :Hall}
+             :contents #{:turkey}
+             :contents #{:turkey}}
+  :Billiard-Room {:desc "An empty room with a pool table in the center...Balls and sticks are strewn all over, it eerily reminds you of home"
+            :title "Does anyone really play this game seriously?"
+            :dir {:north :Fun-House}
+            :dir {:south :Dining-Room}
+            :dir {:east :Office-Room}
+             :contents #{:balls}
+              :contents #{:sticks}}
+ :Lounge {:desc "A place to chill out and relax....finally....."
+            :title "You fell asleep for 5 seconds. Unfortunately you are now 5 weeks behind in CS. rip"
+            :dir {:east :Dining-Room}
+            :dir {:down :Dough-House}
+            :dir {:up :Attic}
+            :dir {:west :Storage-Room}
+            :dir {:down :Fun-House}
+            :dir {:north :Office-Room}
+            :dir {:south :Guest-Room}}
+
+ :Office-Room {:desc "Don't pretend like you're about to study, we all know netflix is your true calling. Proceed forth to enter the promised land"
+            :dir {:north :Fun-House}
+
+ :Guest-Room {:desc "A nice stranger invites you into the guest room. He lets you sleep there for the night"
+            :title "Lesson Number 1, trust no one."
+            :dir {:east :foyer}
+            :dir {:down :foyer}
+            :dir {:up :foyer}
+            :dir {:west :foyer}
+            :dir {:down :foyer}
+            :dir {:north :foyer}
+            :dir {:south :foyer}
+            :contents #{:cyanide}
+            :contents #{:happiness}}
+
+ :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare"
+
+            :title "Lesson Number 2, what the hell is a rainbow turban?"
+
+}
+
+
+
+
+
+
+
+
+
    })
 
 (def adventurer
@@ -51,7 +173,7 @@ for a game or something."
          _ (do (println "I don't understand you.")
                player)
 
-         )) 
+         ))
 
 (defn -main
   "I don't do a whole lot ... yet."
