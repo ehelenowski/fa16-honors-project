@@ -18,13 +18,13 @@ for a game or something."
               :contents #{:very-sharp-pencil}}
 
   :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit."
-              :title "In the dough House"
+              :title "in the dough House"
               :dir {:down :Basement, :up :Attic, :east :Lounge , :north :Attic }
               :contents #{:cinnabon, :knife }}
 
 
   :Basement {:desc "It is dark and cold in here. You desperately need to pee, and want to leave."
-              :title "In the dungeon"
+              :title "in the dungeon"
               :dir {:east :Billiard-Room, :down :Dough-House, :up :Attic}
 
               :contents #{:cobwebs, :a-rusty-screw}}
@@ -32,55 +32,51 @@ for a game or something."
 
 
  :Attic {:desc "It's very small and cramped up here... What's that smell?"
-
-             :title "In the Attic"
+             :title "in the Attic"
              :dir {:east :Dining-Room, :west :Hall, :down :Dough-House, :up :Attic }
              :contents #{:lamp, :key}}
 
 
  :Hall {:desc "A well lit hallway, there are many doors that lead to unknown locations, which route will you take?"
-
-             :title "In the Attic"
+             :title "in the Attic"
              :dir {:east :Dining-Room, :up :Attic, :west :Storage-Room, :down :Basement, :north :Office-Room, :south :Guest-Room   }
 }
 
  :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though."
-            :title "In the Storage-Room"
+            :title "in the Storage-Room"
             :dir {:east :Hall , :up :Fun-House }
             :contents #{:cork, :tweezers, :baseball, :phallic-object}}
 
 
  :Dining-Room {:desc "The livestock seems to be running free in the Dining Room. A chicken decides to pounce on your face and begins scratching your eye balls. What would you like to do?"
-             :title "In the Dining-Room"
+             :title "in the Dining-Room"
              :dir {:east :Kitchen, :down :Dough-House, :up :Attic, :west :Ballroom}
              :contents #{:plate}}
 
  :Ballroom {:desc "Soft music plays in the background. You sit down on the plush couch to rest... You are rudely awakened by a piano that seems to be barelling towards your face, what woudl you like to do?"
-
-             :title "In the Ballroom"
+             :title "in the Ballroom"
              :dir {:east :Hall, :down :Storage-Room, :up :grue-pen}
              :contents #{:vinyl-record}}
 
  :Kitchen {:desc "More livestock running around here... the chef is wrestling with a rat in his hair and pots and pans seem to be flying about the room"
-
-             :title "In the Kitchen"
+             :title "in the Kitchen"
              :dir {:west :Dining-Room, :north :Hall, :down :foyer}
              :contents #{:turkey}}
 
-  :Billiard-Room {:desc "An empty room with a pool table in the center...Balls and sticks are strewn all over, it eerily reminds you of home"
-            :title "Does anyone really play this game seriously?"
+  :Billiard-Room {:desc "Does anyone really play this game seriously? An empty room with a pool table in the center...Balls and sticks are strewn all over, it eerily reminds you of home"
+            :title "in the Billard Room"
             :dir {:north :Fun-House, :south :Dining-Room, :east :Office-Room }
              :contents #{:balls, :sticks}}
-
- :Lounge {:desc "A place to chill out and relax....finally....."
-            :title "You fell asleep for 5 seconds. Unfortunately you are now 5 weeks behind in CS. rip"
+ :Lounge {:desc "You fell asleep for 5 seconds. Unfortunately you are now 5 weeks behind in CS. rip. A place to chill out and relax....finally....."
+            :title "in the Lounge. "
             :dir {:east :Dining-Room,  :up :Attic, :west :Storage-Room, :down :Fun-House, :north :Office-Room, :south :Guest-Room }}
 
  :Office-Room {:desc "Don't pretend like you're about to study, we all know netflix is your true calling. Proceed forth to enter the promised land"
+            :title "in the Office Room"
             :dir {:north :Fun-House}}
 
- :Guest-Room {:desc "A nice stranger invites you into the guest room. He lets you sleep there for the night"
-            :title "Lesson Number 1, trust no one."
+ :Guest-Room {:desc "Lesson Number 1, trust no one. A nice stranger invites you into the guest room. He lets you sleep there for the night"
+            :title "in the Guest Room"
             :dir {:east :foyer , :south :foyer , :down :foyer , :up :foyer ,  :west :foyer , :north :foyer }
             :contents #{:cyanide, :happiness}}
 
@@ -121,10 +117,10 @@ for a game or something."
   (match command
          [:look] (update-in player [:seen] #(disj % (-> player :location)))
          (:or [:n] [:north] ) (go :north player)
-          [:south] (go :south player)
+          [:south](go :south player)
           [:east] (go :east player)
           [:west] (go :west player)
-         [:up] (go :up player)
+          [:up]   (go :up player)
           [:down] (go :down player)
 
          _ (do (println "I don't understand you.")
