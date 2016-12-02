@@ -19,7 +19,7 @@ for a game or something."
 
   :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit."
               :title "In the dough House"
-              :dir {:down :Basement, :up :Attic, :east :Lounge}
+              :dir {:down :Basement, :up :Attic, :east :Lounge , :north :Attic }
               :contents #{:cinnabon, :knife }}
 
 
@@ -121,11 +121,11 @@ for a game or something."
   (match command
          [:look] (update-in player [:seen] #(disj % (-> player :location)))
          (:or [:n] [:north] ) (go :north player)
-         (:or [:s] [:south]) (go :south player)
-         (:or [:e] [:east]) (go :east player)
-         (:or [:w] [:west]) (go :west player)
-         (:or [:u] [:up]) (go :up player)
-         (:or [:d] [:down]) (go :down player)
+          [:south] (go :south player)
+          [:east] (go :east player)
+          [:west] (go :west player)
+         [:up] (go :up player)
+          [:down] (go :down player)
 
          _ (do (println "I don't understand you.")
                player)
