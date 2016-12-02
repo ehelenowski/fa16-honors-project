@@ -77,6 +77,7 @@ for a game or something."
             :dir {:east :Dining-Room,  :up :Attic, :west :Storage-Room, :down :Fun-House, :north :Office-Room, :south :Guest-Room }}
 
  :Office-Room {:desc "Don't pretend like you're about to study, we all know netflix is your true calling. Proceed forth to enter the promised land"
+            :title "CS midterm tomorrow better get to studying"
             :dir {:north :Fun-House}}
 
  :Guest-Room {:desc "A nice stranger invites you into the guest room. He lets you sleep there for the night"
