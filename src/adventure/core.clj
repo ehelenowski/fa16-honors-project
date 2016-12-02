@@ -9,8 +9,7 @@
     :foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created
 for a game or something."
            :title "in the foyer"
-           :dir {:south :grue-pen}
-           :dir {:north :Dough-House}
+           :dir {:south :grue-pen, :north :Dough-House}
            :contents #{:raw-egg}}
 
   :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
@@ -20,50 +19,39 @@ for a game or something."
 
   :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit."
               :title "In the dough House"
-              :dir {:down :Basement}
-              :dir {:up :Attic}
-              :dir {:east :Lounge}
-              :contents #{:cinnabon}
-              :contents #{:knife}}
+              :dir {:down :Basement, :up :Attic, :east :Lounge}
+              :contents #{:cinnabon, :knife }}
+              ;:contents #{:knife}}
 
   :Basement {:desc "It is dark and cold in here. You desperately need to pee, and want to leave."
               :title "In the dungeon"
-              :dir {:east :Billiard-Room}
-              :dir {:down :Dough-House}
-              :dir {:up :Attic}
-              :contents #{:cobwebs}
-              :contents #{:a-rusty-screw}}
+              :dir {:east :Billiard-Room, :down :Dough-House, :up :Attic}
+
+              :contents #{:cobwebs, :a-rusty-screw}}
+              ;:contents #{:a-rusty-screw}}
 
 
  :Attic {:desc "It's very small and cramped up here... What's that smell?"
 
              :title "In the Attic"
-             :dir {:east :Dining-Room}
-             :dir {:down :Dough-House}
-             :dir {:up :Attic}
-             :dir {:west :Hall}
-             :contents #{:lamp}
-             :contents #{:key}}
+             :dir {:east :Dining-Room, :west :Hall, :down :Dough-House, :up :Attic }
+             :contents #{:lamp, :key}}
+             ;:contents #{:key}}
 
  :Hall {:desc "A well lit hallway, there are many doors that lead to unknown locations, which route will you take?"
 
              :title "In the Attic"
-             :dir {:east :Dining-Room}
-             :dir {:down :Dough-House}
-             :dir {:up :Attic}
-             :dir {:west :Storage-Room}
-             :dir {:down :Basement}
-             :dir {:north :Office-Room}
-             :dir {:south :Guest-Room}}
+             :dir {:east :Dining-Room, :down :Dough-House, :up :Attic, :west :Storage-Room, :down :Basement, :north :Office-Room, :south :Guest-Room   }
+}
 
  :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though."
             :title "In the Storage-Room"
             :dir {:east :Hall}
             :dir {:up :Fun-House}
-            :contents #{:cork}
-            :contents #{:tweezers}
-            :contents #{:baseball}
-            :contents #{:phallic-object}}
+            :contents #{:cork, :tweezers, }
+          ;  :contents #{:tweezers}
+          ;  :contents #{:baseball}
+          ;  :contents #{:phallic-object}}
 
  :Dining-Room {:desc "The livestock seems to be running free in the Dining Room. A chicken decides to pounce on your face and begins scratching your eye balls. What would you like to do?"
              :title "In the Dining-Room"
@@ -88,14 +76,14 @@ for a game or something."
              :dir {:down :foyer}
              :dir {:north :Hall}
              :contents #{:turkey}
-             :contents #{:turkey}}
+          ;   :contents #{:turkey}}
   :Billiard-Room {:desc "An empty room with a pool table in the center...Balls and sticks are strewn all over, it eerily reminds you of home"
             :title "Does anyone really play this game seriously?"
             :dir {:north :Fun-House}
             :dir {:south :Dining-Room}
             :dir {:east :Office-Room}
              :contents #{:balls}
-              :contents #{:sticks}}
+        ;      :contents #{:sticks}}
  :Lounge {:desc "A place to chill out and relax....finally....."
             :title "You fell asleep for 5 seconds. Unfortunately you are now 5 weeks behind in CS. rip"
             :dir {:east :Dining-Room}
@@ -119,8 +107,8 @@ for a game or something."
             :dir {:north :foyer}
             :dir {:south :foyer}
             :contents #{:cyanide}
-            :contents #{:happiness}
-            :contents #{:death}}
+        ;    :contents #{:happiness}
+        ;    :contents #{:death}}
 
  :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare"
 
@@ -169,7 +157,11 @@ for a game or something."
   (match command
          [:look] (update-in player [:seen] #(disj % (-> player :location)))
          (:or [:n] [:north] ) (go :north player)
-         [:south] (go :south player)
+         (:or [:s] [:south]) (go :south player)
+         (:or [:e] [:east]) (go :east player)
+         (:or [:w] [:west]) (go :west player)
+         (:or [:u] [:up]) (go :up player)
+         (:or [:d] [:down]) (go :down player)
 
          _ (do (println "I don't understand you.")
                player)
