@@ -76,7 +76,7 @@ for a game or something."
             :dir {:north :Fun-House}}
 
  :Guest-Room {:desc "Lesson Number 1, trust no one. A nice stranger invites you into the guest room. He lets you sleep there for the night"
-            :title "in the Guest Room"
+            :title "in the Guest Room, sucker"
             :dir {:east :foyer , :south :foyer , :down :foyer , :up :foyer ,  :west :foyer , :north :foyer }
             :contents #{:cyanide, :happiness}}
 
