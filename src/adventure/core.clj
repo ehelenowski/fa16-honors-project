@@ -110,18 +110,35 @@ for a game or something."
           player)
       (assoc-in player [:location] dest))))
 
+(defn help []
+  (println "Commands:")
+  (println "look- repeats description")
+  (println "north- go north")
+  (println "south- go south")
+  (println "east- go east")
+  (println "west- go west")
+  (println "up- go up")
+  (println "down- go down")
+  (println "collect- pick up an item (max 5)")
+  (println "drop- drop an item")
+  (println "dodge- dodge an opponent")
+  (println "run- picks random direction")
+  (println "display- displays conents of inventory")
+  (println "help- displays all commands"))
+
 (defn tock [player]
   (update-in player [:tick] inc))
 
 (defn respond [player command]
   (match command
-         [:look] (update-in player [:seen] #(disj % (-> player :location)))
-         (:or [:n] [:north] ) (go :north player)
+          [:look] (update-in player [:seen] #(disj % (-> player :location)))
+          [:north](go :north player)
           [:south](go :south player)
           [:east] (go :east player)
           [:west] (go :west player)
           [:up]   (go :up player)
           [:down] (go :down player)
+          [:help] (help)
 
          _ (do (println "I don't understand you.")
                player)
@@ -129,7 +146,6 @@ for a game or something."
          ))
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
   (loop [local-map the-map
          local-player adventurer]
