@@ -124,26 +124,27 @@ for a game or something."
   (println "dodge- dodge an opponent")
   (println "run- picks random direction")
   (println "display- displays conents of inventory")
-  (println "help- displays all commands"))
+  (println "help- displays all commands")
+  )
 
 (defn tock [player]
   (update-in player [:tick] inc))
 
-(defn respond [player command]
-  (match command
-          [:look] (update-in player [:seen] #(disj % (-> player :location)))
-          [:north](go :north player)
-          [:south](go :south player)
-          [:east] (go :east player)
-          [:west] (go :west player)
-          [:up]   (go :up player)
-          [:down] (go :down player)
-          [:help] (help)
+  (defn respond [player command]
+    (match command
+            [:look] (update-in player [:seen] #(disj % (-> player :location)))
+            (:or [:n] [:north]) (go :north player)
+            (:or [:s] [:south]) (go :south player)
+            [:east] (go :east player)
+            [:west] (go :west player)
+            [:up]   (go :up player)
+            [:down] (go :down player)
+            [:help] (help)
 
-         _ (do (println "I don't understand you.")
-               player)
+           _ (do (println "I don't understand you.")
+                 player)
 
-         ))
+           ))
 
 (defn -main
   [& args]
