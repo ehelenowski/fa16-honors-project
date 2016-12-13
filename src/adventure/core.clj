@@ -110,7 +110,7 @@ for a game or something."
           player)
       (assoc-in player [:location] dest))))
 
-(defn help []
+(defn help [player]
   (println "Commands:")
   (println "look- repeats description")
   (println "north- go north")
@@ -123,8 +123,9 @@ for a game or something."
   (println "drop- drop an item")
   (println "dodge- dodge an opponent")
   (println "run- picks random direction")
-  (println "display- displays conents of inventory")
+  (println "display- displays contents of inventory")
   (println "help- displays all commands")
+  player
   )
 
 (defn tock [player]
@@ -139,7 +140,7 @@ for a game or something."
             [:west] (go :west player)
             [:up]   (go :up player)
             [:down] (go :down player)
-            [:help] (help)
+            [:help] (help player)
 
            _ (do (println "I don't understand you.")
                  player)
