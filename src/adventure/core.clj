@@ -132,7 +132,7 @@ for a game or something."
 (defn display [player]
  (if (empty? (-> the-map (player :location) :contents))
      (println "Nothing to see here...move along")
-     (print (-> the-map (player :location) :contents)))
+     (println (-> the-map (player :location) :contents)))
  player)
 
 
