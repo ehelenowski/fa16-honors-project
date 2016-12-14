@@ -128,19 +128,29 @@ for a game or something."
   player
   )
 
+
+(defn display [player]
+ (if (empty? (-> the-map (player :location) :contents))
+     (println "Nothing to see here...move along")
+     (print (-> the-map (player :location) :contents)))
+ player)
+
+
+
 (defn tock [player]
   (update-in player [:tick] inc))
 
   (defn respond [player command]
     (match command
             [:look] (update-in player [:seen] #(disj % (-> player :location)))
-            (:or [:n] [:north]) (go :north player)
-            (:or [:s] [:south]) (go :south player)
+             [:north] (go :north player)
+             [:south] (go :south player)
             [:east] (go :east player)
             [:west] (go :west player)
             [:up]   (go :up player)
             [:down] (go :down player)
             [:help] (help player)
+            [:display] (display player)
 
            _ (do (println "I don't understand you.")
                  player)
