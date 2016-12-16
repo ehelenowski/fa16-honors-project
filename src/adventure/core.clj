@@ -129,6 +129,7 @@ for a game or something."
   )
 
 
+
   (defn display [player]
       (let [location (player :location)]
       (do (println (str (-> the-map location :contents)))player)))
