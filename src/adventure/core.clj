@@ -112,8 +112,8 @@
         contents ((-> the-map current_room) :contents)
         inventory (-> player :inventory)]
         (if (contents (name object))
-          (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object)))
-              ())
+          (if (inventory (name object)) (do (println (str "You can't pick up another " (name object) "! Stop being so greedy! ")) player)
+          (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object)))))
           (do (println "That object doesn't exist in this room, ya dummy! ") player))))
 
 (defn go [dir player]
