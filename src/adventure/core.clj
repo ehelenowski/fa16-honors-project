@@ -112,12 +112,8 @@
         contents ((-> the-map current_room) :contents)
         inventory (-> player :inventory)]
         (if (contents (name object))
-<<<<<<< HEAD
-          (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object))))
-=======
           (if (inventory (name object)) (do (println (str "You can't pick up another " (name object) "! Stop being so greedy! ")) player)
           (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object)))))
->>>>>>> 12ee3fe48857892f237d663fad999fe44dff16ea
           (do (println "That object doesn't exist in this room, ya dummy! ") player))))
 
 
@@ -135,10 +131,10 @@
 
 (def not-nil? (complement nil?))
 
-  (defn run [player]
-    (loop [ location (-> player :location)
+(defn run [player]
+  (loop [ location (-> player :location)
             n (rand-int 6)]
-      (cond
+   (cond
    (= n 0) (if (not-nil? (->> the-map location :dir :north)) (go :north player) (recur location (rand-int 6)))
    (= n 1) (if (not-nil? (->> the-map location :dir :south)) (go :south player) (recur location (rand-int 6)))
    (= n 2) (if (not-nil? (->> the-map location :dir :east)) (go :east player) (recur location (rand-int 6)))
@@ -146,9 +142,6 @@
    (= n 4) (if (not-nil? (->> the-map location :dir :up)) (go :up player) (recur location (rand-int 6)))
    (= n 5) (if (not-nil? (->> the-map location :dir :down)) (go :down player) (recur location (rand-int 6)))
    )))
-
-
-
 
 (defn respond [player command]
   (if (contains? command 1)
