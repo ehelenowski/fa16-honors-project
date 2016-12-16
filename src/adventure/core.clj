@@ -129,11 +129,9 @@ for a game or something."
   )
 
 
-(defn display [player]
- (if (empty? (-> the-map (player :location) :contents))
-     (println "Nothing to see here...move along:" (-> the-map (player :location) :contents))
-     (println (-> the-map (player :location) :contents)))
- player)
+  (defn display [player]
+      (let [location (player :location)]
+      (do (println (str (-> the-map location :content)))player)))
 
  (defn drop [player item]
   (if (contains? (-> player :inventory) item)
