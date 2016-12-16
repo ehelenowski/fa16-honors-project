@@ -31,7 +31,7 @@
              :contents #{"lamp", "key"}}
 
  :Hall {:desc "A well lit hallway, there are many doors that lead to unknown locations, which route will you take? "
-             :title "in the Attic"
+             :title "in the Hall"
              :dir {:east :Dining-Room, :up :Attic, :west :Storage-Room, :down :Basement, :north :Office-Room, :south :Guest-Room }}
 
  :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though. "
@@ -112,9 +112,14 @@
         contents ((-> the-map current_room) :contents)
         inventory (-> player :inventory)]
         (if (contents (name object))
-          (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object)))
-              ())
+          (do (println (str "You have grabbed a(n) " (name object))) (update-in player [:inventory] #(conj % (name object))))
           (do (println "That object doesn't exist in this room, ya dummy! ") player))))
+
+
+            (defn toss [player object]
+              (let [inv (get-in player [:inventory])]
+              (if (inv (name object))(do (println (str "You have dropped " (name object)))(update-in player [:inventory] #(disj %(name object))))
+                                  (do (println "You don't have such item")player))))
 
 (defn go [dir player]
   (let [location (player :location)
@@ -123,10 +128,28 @@
   (do (println "You can't go that way.") player)
   (assoc-in player [:location] dest))))
 
+(def not-nil? (complement nil?))
+
+  (defn run [player]
+    (loop [ location (-> player :location)
+            n (rand-int 6)]
+      (cond
+   (= n 0) (if (not-nil? (->> the-map location :dir :north)) (go :north player) (recur location (rand-int 6)))
+   (= n 1) (if (not-nil? (->> the-map location :dir :south)) (go :south player) (recur location (rand-int 6)))
+   (= n 2) (if (not-nil? (->> the-map location :dir :east)) (go :east player) (recur location (rand-int 6)))
+   (= n 3) (if (not-nil? (->> the-map location :dir :west)) (go :west player) (recur location (rand-int 6)))
+   (= n 4) (if (not-nil? (->> the-map location :dir :up)) (go :up player) (recur location (rand-int 6)))
+   (= n 5) (if (not-nil? (->> the-map location :dir :down)) (go :down player) (recur location (rand-int 6)))
+   )))
+
+
+
+
 (defn respond [player command]
   (if (contains? command 1)
   (match [(command 0)]
       [:grab] (grab player (command 1))
+      [:drop] (toss player (command 1))
   )
   (match command
       [:look] (update-in player [:seen] #(disj % (-> player :location)))
@@ -141,6 +164,7 @@
       [:tock] (tock player)
       [:show-ticks] (show-ticks player)
       [:show-inventory] (show-inventory player)
+      [:run] (run player)
 
       _ (do (println "I don't understand you.") player))))
 
