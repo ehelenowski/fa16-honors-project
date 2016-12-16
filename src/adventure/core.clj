@@ -135,6 +135,11 @@ for a game or something."
      (println (-> the-map (player :location) :contents)))
  player)
 
+ (defn drop [player item]
+  (if (contains? (-> player :inventory) item)
+      ((dissoc (-> player :inventory) item) (assoc-in (-> the-map (player :location) :contents) item))
+      (println "You can't drop that!"))
+      player)
 
 
 (defn tock [player]
