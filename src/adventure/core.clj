@@ -129,9 +129,10 @@ for a game or something."
   )
 
 
+
   (defn display [player]
       (let [location (player :location)]
-      (do (println (str (-> the-map location :content)))player)))
+      (do (println (str (-> the-map location :contents)))player)))
 
  (defn drop [player item]
   (if (contains? (-> player :inventory) item)
