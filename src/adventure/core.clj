@@ -198,13 +198,22 @@
 
 (def grue {:health 100})
 
-(defn respond [player command]
+(defn use_item [player monster item]
+  (let [loc (-> player :location)]
+    ((if (and (= loc :grue-pen) (> (-> monster :health) 0))
+      (if (= item :very-sharp-pencil)
+      (do (println "You did it!!!") player)
+      (do (println "Your choice of weapon was poor and ineffective against the grue!") (kill player)))
+      (do (println "Pssst. That did absolutely nothing..") player)))))
+
+(defn respond [player monster command]
   (if (contains? command 1)
   (match [(command 0)]
       [:grab] (grab player (command 1))
       [:drop] (toss player (command 1))
       [:show] (if (= (command 1) :ticks) (show-ticks player) (show-inventory player))
       [:look] (display player)
+      [:use] (use_item player monster (command 1))
   )
   (match command
       [:look] (update-in player [:seen] #(disj % (-> player :location)))
@@ -226,12 +235,17 @@
 
       _ (do (println "I don't understand you.") player))))
 
-(defn status [player]
+(defn monster_respond [monster player command]
+  (if (contains? command 1)
+    (if (and (= (command 0) :use)(= (-> player :location) :grue-pen) (= (command 1) :very-sharp-pencil))
+      (do (println "\nAtlas, you've killed the mighty grue! Grab what you need and leave this place!") (assoc monster :health 0)))) monster)
+
+(defn status [player monster]
   (let [location (player :location)]
     (print (str "You are " (-> the-map location :title) ". "))
     (when-not ((player :seen) location)
       (print (-> the-map location :desc)))
-    (if (and (= location :grue-pen) (> (-> grue :health) 0))
+    (if (and (= location :grue-pen) (> (-> monster :health) 0))
         (println "\nTHE GRUE IS COMING TO KILL YOU!!!! RUN!!!\n"))
     (update-in player [:seen] #(conj % location))))
 
@@ -241,11 +255,11 @@
 (defn -main
   [& args]
   (loop [local-map the-map
-        ;  local-monster grue
-         local-player adventurer]
-    (let [pl (status local-player)
-          ; monster grue
-          _  (println "\nWhat do you want to do?")
+         local-player adventurer
+         local-monster grue]
+    (let [pl (status local-player local-monster)
+          _ (println "\n\nWhat do you want to do?")
+
           command (read-line)]
       (println "")
-      (recur local-map (respond pl (to-keywords command))))))
+      (recur local-map (respond pl local-monster (to-keywords command)) (monster_respond local-monster pl (to-keywords command))))))
