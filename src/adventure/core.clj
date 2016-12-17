@@ -200,13 +200,13 @@ If any prisoner can figure out what color hat he has on his own head with 100% c
 
 (def grue {:health 100})
 
-(defn use_item [player monster item]
-  (let [loc (-> player :location)]
-    ((if (and (= loc :grue-pen) (> (-> monster :health) 0))
-      (if (= item :very-sharp-pencil)
-      (do (println "You did it!!!") player)
-      (do (println "Your choice of weapon was poor and ineffective against the grue!") (kill player)))
-      (do (println "Pssst. That did absolutely nothing..") player)))))
+; (defn use_item [player monster item]
+;   (let [loc (-> player :location)]
+;     ((if (and (= loc :grue-pen) (> (-> monster :health) 0))
+;       (if (= item :very-sharp-pencil)
+;       (do (println "You did it!!!") player)
+;       (do (println "Your choice of weapon was poor and ineffective against the grue!") (kill player)))
+;       (do (println "Pssst. That did absolutely nothing..") player)))))
 
 (defn respond [player monster command]
   (if (contains? command 1)
@@ -215,7 +215,8 @@ If any prisoner can figure out what color hat he has on his own head with 100% c
       [:drop] (toss player (command 1))
       [:show] (if (= (command 1) :ticks) (show-ticks player) (show-inventory player))
       [:look] (display player)
-      [:use] (use_item player monster (command 1))
+      
+      [_] (do (println "I don't understand you.") player)
   )
   (match command
       [:look] (update-in player [:seen] #(disj % (-> player :location)))
