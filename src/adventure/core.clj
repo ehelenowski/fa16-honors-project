@@ -7,7 +7,7 @@
   {
     :foyer {:desc "The walls are freshly painted but do not have any pictures. You get the feeling it was just created for a game or something. "
            :title "in the foyer"
-           :dir {:south :grue-pen, :north :Dough-House}
+           :dir {:south :grue-pen, :north :Dough-House, :up :Fun-House}
            :contents #{"raw-egg"}}
 
   :grue-pen {:desc "It is very dark. You are about to be eaten by a grue. "
@@ -76,8 +76,10 @@
             :title "... in the fun house! Ba dum dum!!! "
             :dir {:skin :Escape}
             :puzzle [
-                    {:question "To escape this maze, you must first solve the mystery of how to kill the Grue. Only one object in this maze can kill it. We will only provide you with one hint; to slay the Grue you need a weapon that is mightier than a sword."
-                    :answer "very-sharp-pencil"}
+                    {:question "The jailer seats three of the men into a line. The fourth man is put behind a screen (or in a separate room). He gives all four men party hats. The jailer explains that there are two black hats and two white hats, that each prisoner is wearing one of the hats, and that each of the prisoners see only the hats in front of him but neither on himself nor behind him. The fourth man behind the screen can't see or be seen by any other prisoner. No communication among the prisoners is allowed.
+
+If any prisoner can figure out what color hat he has on his own head with 100% certainty (without guessing) and tell the jailer, all four prisoners go free. If any prisoner suggests an incorrect answer, all four prisoners are executed. Which prisoner can say with absolute certainty what the color of his hat is? (Back) (Middle) (Front) (Wall-Side)"
+                    :answer "middle"}
 
               ]
           }
