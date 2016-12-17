@@ -133,6 +133,7 @@
   (assoc-in player [:location] dest))))
 
 (def not-nil? (complement nil?))
+(def not-equal? (complement =))
 
 (defn run [player]
   (loop [ location (-> player :location)
@@ -145,6 +146,18 @@
    (= n 4) (if (not-nil? (->> the-map location :dir :up)) (go :up player) (recur location (rand-int 6)))
    (= n 5) (if (not-nil? (->> the-map location :dir :down)) (go :down player) (recur location (rand-int 6)))
    )))
+
+(def adventurer
+  {:location :foyer
+   :inventory #{}
+   :tick 0
+   :seen #{}})
+
+(defn kill [player]
+  (println "You have been killed! That nasty grue must have gotten to you! You must restart from the begining of this game. \n")
+  adventurer)
+
+(def grue {:health 100})
 
 (defn respond [player command]
   (if (contains? command 1)
@@ -176,22 +189,20 @@
     (print (str "You are " (-> the-map location :title) ". "))
     (when-not ((player :seen) location)
       (print (-> the-map location :desc)))
+    (if (and (= location :grue-pen) (> (-> grue :health) 0))
+        (println "\nTHE GRUE IS COMING TO KILL YOU!!!! RUN!!!\n"))
     (update-in player [:seen] #(conj % location))))
 
 (defn to-keywords [commands]
   (mapv keyword (str/split commands #"[.,?! ]+")))
 
-(def adventurer
-   {:location :foyer
-    :inventory #{}
-    :tick 0
-    :seen #{}})
-
 (defn -main
   [& args]
   (loop [local-map the-map
+         local-monster grue
          local-player adventurer]
     (let [pl (status local-player)
+          monster grue
           _  (println "\nWhat do you want to do?")
           command (read-line)]
       (println "")
