@@ -13,7 +13,7 @@
   :grue-pen {:desc "It is very dark. You are about to be eaten by a grue. "
               :title "in the grue pen"
               :dir {:north :foyer}
-              :contents #{"very sharp pencil"}}
+              :contents #{"very-sharp-pencil"}}
 
   :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit. "
               :title "in the dough House"
@@ -23,7 +23,7 @@
   :Basement {:desc "It is dark and cold in here. You desperately need to pee, and want to leave. "
               :title "in the dungeon"
               :dir {:east :Billiard-Room, :down :Dough-House, :up :Attic}
-              :contents #{"cobwebs", "a rusty screw"}}
+              :contents #{"cobwebs", "a-rusty-screw"}}
 
  :Attic {:desc "It's very small and cramped up here... What's that smell? "
              :title "in the Attic"
@@ -37,7 +37,7 @@
  :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though. "
             :title "in the Storage-Room"
             :dir {:east :Hall , :up :Fun-House }
-            :contents #{"cork", "tweezers", "baseball", "phallic object"}}
+            :contents #{"cork", "tweezers", "baseball", "phallic-object"}}
 
 
  :Dining-Room {:desc "The livestock seems to be running free in the Dining Room. A chicken decides to pounce on your face and begins scratching your eye balls. What would you like to do? "
@@ -77,26 +77,29 @@
 })
 
 (defn help [player]
-  (println "Commands:")
+  (println "\nCommands:")
   (println "look- repeats description")
-  (println "north- go north")
-  (println "south- go south")
-  (println "east- go east")
-  (println "west- go west")
-  (println "up- go up")
-  (println "down- go down")
-  (println "collect- pick up an item (max 5)")
-  (println "drop- drop an item")
-  (println "dodge- dodge an opponent")
-  (println "run- picks random direction")
-  (println "display- displays contents of inventory")
-  (println "help- displays all commands")
+  (println "north / n- go north")
+  (println "south / s- go south")
+  (println "east / e- go east")
+  (println "west / w- go west")
+  (println "up / u- go up")
+  (println "down / d- go down")
+  (println "run - picks random direction")
+  (println "grab [item]- pick up an item")
+  (println "drop [item]- drop an item")
+  (println "tock- increases the numbers of the player's ticks")
+  (println "show ticks- shows the number of the player's ticks")
+  (println "show inventory- shows the items in the player's possesion")
+  (println "look around- displays contents of inventory")
+  (println "display- same as look around")
+  (println "help / h - displays all commands\n")
   player
   )
 
 (defn display [player]
   (let [location (player :location)]
-  (do (println (name (str (-> the-map location :contents))))player)))
+  (do (println (name (str (-> the-map location :contents) "\n"))) player)))
 
 (defn tock [player]
   (update-in player [:tick] inc))
@@ -117,10 +120,10 @@
           (do (println "That object doesn't exist in this room, ya dummy! ") player))))
 
 
-            (defn toss [player object]
-              (let [inv (get-in player [:inventory])]
-              (if (inv (name object))(do (println (str "You have dropped " (name object)))(update-in player [:inventory] #(disj %(name object))))
-                                  (do (println "You don't have such item")player))))
+ (defn toss [player object]
+  (let [inventory (-> player :inventory)]
+    (if (inventory (name object)) (do (println (str "You have dropped a(n) " (name object) "\n"))(update-in player [:inventory] #(disj %(name object))))
+                                  (do (println "You don't any of this item\n") player))))
 
 (defn go [dir player]
   (let [location (player :location)
@@ -148,16 +151,18 @@
   (match [(command 0)]
       [:grab] (grab player (command 1))
       [:drop] (toss player (command 1))
+      [:show] (if (= (command 1) :ticks) (show-ticks player) (show-inventory player))
+      [:look] (display player)
   )
   (match command
       [:look] (update-in player [:seen] #(disj % (-> player :location)))
-      [:north] (go :north player)
-      [:south] (go :south player)
-      [:east] (go :east player)
-      [:west] (go :west player)
-      [:up]   (go :up player)
-      [:down] (go :down player)
-      [:help] (help player)
+      [(:or :n :north)](go :north player)
+      [(:or :s :south)](go :south player)
+      [(:or :e :east)] (go :east player)
+      [(:or :w :west)] (go :west player)
+      [(:or :u :up)]   (go :up player)
+      [(:or :d :down)] (go :down player)
+      [(:or :h :help)] (help player)
       [:display] (display player)
       [:tock] (tock player)
       [:show-ticks] (show-ticks player)
@@ -187,6 +192,7 @@
   (loop [local-map the-map
          local-player adventurer]
     (let [pl (status local-player)
-          _  (println "What do you want to do?")
+          _  (println "\nWhat do you want to do?")
           command (read-line)]
+      (println "")
       (recur local-map (respond pl (to-keywords command))))))
