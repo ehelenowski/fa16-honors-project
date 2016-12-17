@@ -7,7 +7,7 @@
   {
     :foyer {:desc "The walls are freshly painted but do not have any pictures. You get the feeling it was just created for a game or something. "
            :title "in the foyer"
-           :dir {:south :grue-pen, :north :Dough-House, :up :Fun-House}
+           :dir {:south :grue-pen, :north :Dough-House}
            :contents #{"raw-egg"}}
 
   :grue-pen {:desc "It is very dark. You are about to be eaten by a grue. "
@@ -74,7 +74,7 @@
 
  :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare. They tell you to drop all your items from your inventory. Now type in puzzle."
             :title "... in the fun house! Ba dum dum!!! "
-            :dir {:skin :Escape}
+            :dir {:skin :Escape :north :foyer}
             :puzzle [
                     {:question "The jailer seats three of the men into a line. The fourth man is put behind a screen (or in a separate room). He gives all four men party hats. The jailer explains that there are two black hats and two white hats, that each prisoner is wearing one of the hats, and that each of the prisoners see only the hats in front of him but neither on himself nor behind him. The fourth man behind the screen can't see or be seen by any other prisoner. No communication among the prisoners is allowed.
 
@@ -200,13 +200,13 @@ If any prisoner can figure out what color hat he has on his own head with 100% c
 
 (def grue {:health 100})
 
-; (defn use_item [player monster item]
-;   (let [loc (-> player :location)]
-;     ((if (and (= loc :grue-pen) (> (-> monster :health) 0))
-;       (if (= item :very-sharp-pencil)
-;       (do (println "You did it!!!") player)
-;       (do (println "Your choice of weapon was poor and ineffective against the grue!") (kill player)))
-;       (do (println "Pssst. That did absolutely nothing..") player)))))
+(defn use_item [player monster item]
+  (let [loc (-> player :location)]
+    ((if (and (= loc :grue-pen) (> (-> monster :health) 0))
+      (if (= item :very-sharp-pencil)
+      (do (println "You did it!!!") player)
+      (do (println "Your choice of weapon was poor and ineffective against the grue!") (kill player)))
+      (do (println "Pssst. That did absolutely nothing..") player)))))
 
 (defn respond [player monster command]
   (if (contains? command 1)
@@ -215,7 +215,7 @@ If any prisoner can figure out what color hat he has on his own head with 100% c
       [:drop] (toss player (command 1))
       [:show] (if (= (command 1) :ticks) (show-ticks player) (show-inventory player))
       [:look] (display player)
-      
+
       [_] (do (println "I don't understand you.") player)
   )
   (match command
