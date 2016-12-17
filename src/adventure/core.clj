@@ -108,7 +108,7 @@
   (println (-> player :tick)) player)
 
 (defn show-inventory [player]
-  (println (-> player :inventory)) player )
+  (println (-> player :inventory)) player)
 
 (defn grab [player object]
   (let [current_room (-> player :location)
@@ -196,7 +196,7 @@
 (defn monster_respond [monster player command]
   (if (contains? command 1)
     (if (and (= (command 0) :use)(= (-> player :location) :grue-pen) (= (command 1) :very-sharp-pencil))
-      (do (println "\nAtlas, you've killed the mighty grue! Grab what you need and leave this place!") (assoc monster :health 0)))) monster)
+      (do (println "\nAtlas, you've killed the mighty grue! Grab what you need and leave this place!")(assoc monster :health 0))monster)monster))
 
 (defn status [player monster]
   (let [location (player :location)]
