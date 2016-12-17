@@ -159,7 +159,9 @@
 
 (def grue {:health 100})
 
-(defn respond [player command]
+
+
+(defn respond [player monster command]
   (if (contains? command 1)
   (match [(command 0)]
       [:grab] (grab player (command 1))
@@ -184,12 +186,17 @@
 
       _ (do (println "I don't understand you.") player))))
 
-(defn status [player]
+(defn monster_respond [monster player command]
+  (if (contains? command 1)
+    (if (and (= (command 0) :use)(= (-> player :location) :grue-pen) (= (command 1) :very-sharp-pencil))
+      (def monster (assoc monster :health 0)))) monster)
+
+(defn status [player monster]
   (let [location (player :location)]
     (print (str "You are " (-> the-map location :title) ". "))
     (when-not ((player :seen) location)
       (print (-> the-map location :desc)))
-    (if (and (= location :grue-pen) (> (-> grue :health) 0))
+    (if (and (= location :grue-pen) (> (-> monster :health) 0))
         (println "\nTHE GRUE IS COMING TO KILL YOU!!!! RUN!!!\n"))
     (update-in player [:seen] #(conj % location))))
 
@@ -199,11 +206,10 @@
 (defn -main
   [& args]
   (loop [local-map the-map
-         local-monster grue
-         local-player adventurer]
-    (let [pl (status local-player)
-          monster grue
-          _  (println "\nWhat do you want to do?")
+         local-player adventurer
+         local-monster grue]
+    (let [pl (status local-player local-monster)
+          _  (println "\n\nWhat do you want to do?")
           command (read-line)]
       (println "")
-      (recur local-map (respond pl (to-keywords command))))))
+      (recur local-map (respond pl local-monster (to-keywords command)) (monster_respond local-monster pl (to-keywords command))))))
