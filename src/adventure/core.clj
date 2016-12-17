@@ -7,13 +7,13 @@
   {
     :foyer {:desc "The walls are freshly painted but do not have any pictures. You get the feeling it was just created for a game or something. "
            :title "in the foyer"
-           :dir {:south :grue-pen, :north :Dough-House}
+           :dir {:south :grue-pen, :north :Dough-House, :up :Fun-House}
            :contents #{"raw-egg"}}
 
   :grue-pen {:desc "It is very dark. You are about to be eaten by a grue. "
               :title "in the grue pen"
               :dir {:north :foyer}
-              :contents #{"very-sharp-pencil"}}
+              :contents #{"phallic-object"}}
 
   :Dough-House {:desc "It smells nice in here, almost like a pillsbury dough boy's armpit. "
               :title "in the dough House"
@@ -28,7 +28,7 @@
  :Attic {:desc "It's very small and cramped up here... What's that smell? "
              :title "in the Attic"
              :dir {:east :Dining-Room, :west :Hall, :down :Dough-House, :up :Attic }
-             :contents #{"lamp", "key"}}
+             :contents #{"lamp", "waginer"}}
 
  :Hall {:desc "A well lit hallway, there are many doors that lead to unknown locations, which route will you take? "
              :title "in the Hall"
@@ -37,7 +37,7 @@
  :Storage-Room {:desc "Lots of miscellaneous items in this room, it only has one other door besides the entrance though. "
             :title "in the Storage-Room"
             :dir {:east :Hall , :up :Fun-House }
-            :contents #{"cork", "tweezers", "baseball", "phallic-object"}}
+            :contents #{"cork", "tweezers", "baseball", "very-sharp-pencil"}}
 
 
  :Dining-Room {:desc "The livestock seems to be running free in the Dining Room. A chicken decides to pounce on your face and begins scratching your eye balls. What would you like to do? "
@@ -48,7 +48,7 @@
  :Ballroom {:desc "Soft music plays in the background. You sit down on the plush couch to rest... You are rudely awakened by a piano that seems to be barelling towards your face, what woudl you like to do? "
              :title "in the Ballroom"
              :dir {:east :Hall, :down :Storage-Room, :up :grue-pen}
-             :contents #{"vinyl record"}}
+             :contents #{"vinyl-record"}}
 
  :Kitchen {:desc "More livestock running around here... the chef is wrestling with a rat in his hair and pots and pans seem to be flying about the room. "
              :title "in the Kitchen"
@@ -72,9 +72,50 @@
             :dir {:east :foyer , :south :foyer , :down :foyer , :up :foyer ,  :west :foyer , :north :foyer }
             :contents #{"cyanide", "happiness"}}
 
- :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare. "
-            :title "... in the fun house! Ba dum dum!!! "}
+ :Fun-House {:desc "At long last you have reached the end of the line. Two strange men wearing rainbow turbans wait with their arms crossed at the opposite end of the room. They look suspicious...but you approach them eager to exit the nightmare. They tell you to drop all your items from your inventory. Now type in puzzle."
+            :title "... in the fun house! Ba dum dum!!! "
+            :dir {:skin :Escape}
+            :puzzle [
+                    {:question "The jailer seats three of the men into a line. The fourth man is put behind a screen (or in a separate room). He gives all four men party hats. The jailer explains that there are two black hats and two white hats, that each prisoner is wearing one of the hats, and that each of the prisoners see only the hats in front of him but neither on himself nor behind him. The fourth man behind the screen can't see or be seen by any other prisoner. No communication among the prisoners is allowed.
+
+If any prisoner can figure out what color hat he has on his own head with 100% certainty (without guessing) and tell the jailer, all four prisoners go free. If any prisoner suggests an incorrect answer, all four prisoners are executed. Which prisoner can say with absolute certainty what the color of his hat is? (Back) (Middle) (Front) (Wall-Side)"
+                    :answer "middle"}
+
+              ]
+          }
+
+ :Escape {:desc " You made it!! Congratulations. Now go out there and make something out of your life. (Type Leave)"
+            :title "The light at the end of the tunnel"
+            :contents #{"A-CS-Degree"}
+            :dir {:leave :Dead}}
+
+ :Dead {}
 })
+
+(defn give_puzzle [n puz]
+  (let [num (rand-int n)
+       ques (get-in puz [num :question])
+       ans (get-in puz [num :answer])
+       _ (println (str ques))
+       answer (read-line)]
+  (if (= answer ans)true false)))
+
+(defn puzzle [player]
+    (let [curr-room (get-in player [:location])
+          puz (get-in the-map [curr-room :puzzle])
+          inv (get-in player [:inventory])]
+    (if (nil? puz)
+        (if (inv "skin")(do (println "Just leave already.")player)player)
+        (if (give_puzzle (count puz) puz)
+          (let [cont (get-in the-map [curr-room :content])]
+              (if (inv "skin") (do (println "You already have the skin") player)
+                                    (do (println "You did it! Check your inventory, and type in the recieved item to proceed.")(update-in player [:inventory] #(conj % "skin")))))
+              (if (inv "skin") (do (println "leaaaveeeeee.")player)
+                              (do (println "WRONG.")player))
+         ))))
+
+
+
 
 (defn help [player]
   (println "\nCommands:")
@@ -185,11 +226,14 @@
       [(:or :u :up)]   (go :up player)
       [(:or :d :down)] (go :down player)
       [(:or :h :help)] (help player)
+       [:skin] (go :skin player)
+       [:leave] (go :leave player)
       [:display] (display player)
       [:tock] (tock player)
       [:show-ticks] (show-ticks player)
       [:show-inventory] (show-inventory player)
       [:run] (run player)
+      [:puzzle] (puzzle player)
 
       _ (do (println "I don't understand you.") player))))
 
@@ -216,7 +260,8 @@
          local-player adventurer
          local-monster grue]
     (let [pl (status local-player local-monster)
-          _  (println "\n\nWhat do you want to do?")
+          _ (println "\n\nWhat do you want to do?")
+
           command (read-line)]
       (println "")
       (recur local-map (respond pl local-monster (to-keywords command)) (monster_respond local-monster pl (to-keywords command))))))
